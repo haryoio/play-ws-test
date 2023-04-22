@@ -1,0 +1,112 @@
+<configuration>
+
+    <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${application.home}/logs/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home}/logs/application.log.%d{yyyy-MM-dd}-%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
+            <jsonGeneratorDecorator class="net.logstash.logback.mask.MaskingJsonGeneratorDecorator">
+                <valueMasker class="jp.jig.product.live.server.common.masker.DatadogPersonalValueMasker"/>
+            </jsonGeneratorDecorator>
+        </encoder>
+    </appender>
+
+    <appender name="ACCESS_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${application.home}/logs/access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home}/logs/access.log.%d{yyyy-MM-dd}-%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%message%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR_JSONL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <file>${application.home}/logs/application.jsonl.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home}/logs/application.jsonl.log.%d{yyyy-MM-dd}-%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <jsonGeneratorDecorator class="net.logstash.logback.mask.MaskingJsonGeneratorDecorator">
+                <valueMasker class="jp.jig.product.live.server.common.masker.DatadogPersonalValueMasker"/>
+            </jsonGeneratorDecorator>
+        </encoder>
+
+    </appender>
+
+    <appender name="ASYNC_ACCESS_ROLLING_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="ACCESS_ROLLING_FILE"/>
+    </appender>
+
+    <appender name="WARN_JSONL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${application.home}/logs/warn.jsonl.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home}/logs/warn.jsonl.log.%d{yyyy-MM-dd}-%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+    <logger name="play" level="INFO"/>
+    <logger name="application" level="DEBUG"/>
+    <logger name="jp.jig.product.live.server" level="DEBUG"/>
+
+    <logger name="access" level="DEBUG" additivity="false">
+        <appender-ref ref="ASYNC_ACCESS_ROLLING_FILE"/>
+    </logger>
+
+    <logger name="DataCache" level="WARN"/>
+    <logger name="ForwardingRedis" level="DEBUG"/>
+    <logger name="RedisManager" level="WARN"/>
+    <logger name="ImageAnalyzer" level="INFO"/>
+    <logger name="LiveViewerLastAccessUpdater" level="INFO"/>
+    <logger name="SesBounceNotification" level="INFO" additivity="false">
+        <appender-ref ref="WARN_JSONL"/>
+    </logger>
+    <logger name="jp.jig.product.live.server.api.utils.RedisCacheSizeOverLogSender" level="WARN">
+        <appender-ref ref="WARN_JSONL"/>
+    </logger>
+    <logger name="jp.jig.product.live.server.api.utils.BlockedThreadMonitor" level="WARN">
+        <appender-ref ref="WARN_JSONL"/>
+    </logger>
+
+    <!-- Off these ones as they are annoying, and anyway we manage configuration ourself -->
+    <logger name="com.avaje.ebean.config.PropertyMapLoader" level="OFF"/>
+    <logger name="com.avaje.ebeaninternal.server.core.XmlConfigLoader" level="OFF"/>
+    <logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF"/>
+    <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF"/>
+    <!-- コンソールに大量のSQLデバッグログが出ないようコメントアウト　適宜削除 -->
+    <!--<logger name="io.ebean.SQL" level="TRACE"/>-->
+    <logger name="io.ebean.SQL" level="OFF"/>
+    <logger name="io.ebean.TXN" level="OFF"/>
+    <logger name="io.ebean.SUM" level="OFF"/>
+    <!--<logger name="io.ebean.SUM" level="TRACE"/>-->
+
+    <root level="ERROR">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_JSONL"/>
+    </root>
+
+</configuration>
