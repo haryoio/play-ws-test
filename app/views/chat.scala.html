@@ -1,0 +1,24 @@
+@(roomName: String)
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Chat - Room: @roomName</title>
+  <script type="text/javascript" src="@routes.Assets.versioned("javascripts/chat.js")"></script>
+  <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/chat.css")">
+</head>
+<body>
+<div id="chat-container">
+  <h2>Room: @roomName</h2>
+  <div id="messages"></div>
+  <form id="message-form">
+    <input type="text" id="message-input" placeholder="Type your message...">
+    <button type="submit">Send</button>
+  </form>
+  <p>Elapsed time: <span id="timer">0</span> ms</p>
+  <button id="startButton">Start</button>
+  <button id="stopButton">Stop</button>
+  <button id="resetButton">Reset</button>
+</div>
+</body>
+</html>
