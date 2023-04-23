@@ -70,7 +70,7 @@ public class ChatActor extends AbstractActor {
                             }
                         break;
                     default:
-                        throw new IllegalAccessException("Unknown message type");
+                        throw new IllegalAccessException("Unknown message type: "+ messageType);
                     }
 
                 })
