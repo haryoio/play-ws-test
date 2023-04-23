@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
 
   "org.projectlombok" % "lombok" % "1.18.26",
   "com.h2database" % "h2" % "1.4.192",
-  "org.mariadb.jdbc" % "mariadb-java-client" % "2.7.6",
+  "org.mariadb.jdbc" % "mariadb-java-client" % "2.7.9",
 )
 
 scalaVersion := "2.13.10"
