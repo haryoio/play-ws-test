@@ -1,9 +1,9 @@
-version: '2'
+version: "2"
 services:
   db:
     build:
       context: ./docker/db/
       dockerfile: ./8.0/Dockerfile
     container_name: play-ws-mysql
-    ports
-    - 3306:3306
+    ports:
+      - 3306:3306
