@@ -5,7 +5,6 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import models.websocket.messages.JoinRoomMessageDto;
 import models.websocket.messages.Message;
 import services.RoomManager;
 import services.TimerManager;
