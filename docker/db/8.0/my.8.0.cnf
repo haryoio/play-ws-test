@@ -1,0 +1,3 @@
+[mysqld]
+
+information_schema_stats_expiry = 0
