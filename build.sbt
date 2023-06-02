@@ -17,6 +17,6 @@ libraryDependencies ++= Seq(
   "org.mariadb.jdbc" % "mariadb-java-client" % "2.7.9",
 )
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.11"
 
 libraryDependencies += guice
