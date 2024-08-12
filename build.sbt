@@ -13,7 +13,7 @@ libraryDependencies ++= Seq(
   evolutions,
 
   "org.projectlombok" % "lombok" % "1.18.26",
-  "com.h2database" % "h2" % "1.4.200",
+  "com.h2database" % "h2" % "2.3.232",
   "org.mariadb.jdbc" % "mariadb-java-client" % "2.7.9",
 )
 
